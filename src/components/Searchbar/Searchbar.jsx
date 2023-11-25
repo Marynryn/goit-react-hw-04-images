@@ -1,39 +1,37 @@
-import React from "react";
+import { useEffect, useState } from "react";
 import { SearchBtn, SearchForm, Input, SearchBtnLabel, HeaderSearchbar } from "./Searchbar.styled";
 
-export class Searchbar extends React.Component {
-    state = {
-        query: "",
-    }
-    handleSubmit = event => {
+export function Searchbar({ onSubmit }) {
+    const [query, setQuery] = useState("")
+
+    const handleSubmit = event => {
         event.preventDefault();
-        const { query } = this.state;
-        this.props.onSubmit(query);
-        this.reset();
+
+        onSubmit(query);
+        reset();
     };
-    handleChange = event => {
-        this.setState({ query: event.currentTarget.value })
+    const handleChange = event => {
+        setQuery(event.currentTarget.value)
     }
-    reset = () => {
-        this.setState({ query: '' });
+    const reset = () => {
+        setQuery('');
     };
-    render() {
-        return (
-            <HeaderSearchbar >
-                <SearchForm onSubmit={this.handleSubmit}>
-                    <Input
-                        className="input"
-                        type="text"
-                        autoComplete="off"
-                        autoFocus
-                        placeholder="Search images and photos"
-                        onChange={this.handleChange}
-                    />
-                    <SearchBtn type="submit">
-                        <SearchBtnLabel >Search</SearchBtnLabel>
-                    </SearchBtn>
-                </SearchForm>
-            </HeaderSearchbar>
-        )
-    }
+
+    return (
+        <HeaderSearchbar >
+            <SearchForm onSubmit={handleSubmit}>
+                <Input
+                    className="input"
+                    type="text"
+                    autoComplete="off"
+                    autoFocus
+                    placeholder="Search images and photos"
+                    onChange={handleChange}
+                />
+                <SearchBtn type="submit">
+                    <SearchBtnLabel >Search</SearchBtnLabel>
+                </SearchBtn>
+            </SearchForm>
+        </HeaderSearchbar>
+    )
 }
