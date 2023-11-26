@@ -6,13 +6,6 @@ const modalRoot = document.querySelector('#modal-root');
 export default function Modal({ onClose, ImageUrl }) {
 
 
-
-
-    const handleKeyDown = e => {
-        if (e.code === "Escape") {
-            onClose()
-        }
-    }
     const handleBackdropClick = event => {
 
         if (event.currentTarget === event.target) {
@@ -20,9 +13,15 @@ export default function Modal({ onClose, ImageUrl }) {
         }
     }
     useEffect(() => {
-        document.addEventListener('keydown', handleKeyDown)
+        const handleKeyDown = e => {
+            if (e.code === "Escape") {
+                onClose()
+            }
+        }
+        document.addEventListener('keydown', handleKeyDown);
+
         return () => document.removeEventListener('keydown', handleKeyDown)
-    }, []);
+    }, [onClose]);
 
     return createPortal(
         <ModalBackdrop onClick={handleBackdropClick} >

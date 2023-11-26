@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback } from "react";
+import { useState, useEffect } from "react";
 import { serviceSeach } from "helpers/helpers";
 import { Searchbar } from "./Searchbar/Searchbar";
 import ImageGallery from "./ImageGallery/ImageGallery";
@@ -15,24 +15,26 @@ export function App() {
   const [showModal, setShowModal] = useState(false);
   const [selectedImage, setSelectedImage] = useState(null);
 
-  const getImage = useCallback(async () => {
-    setLoading(true);
-    try {
-      const dataImages = await serviceSeach(query, page);
 
-      setPhotos([...photos, ...dataImages.hits]);
-      setIsVisibleBtn(page < Math.ceil(dataImages.totalHits / 12));
-
-
-    } catch (error) {
-      setPhotos([]);
-    } finally { setLoading(false); }
-  }, [page, query]);
 
   useEffect(() => {
     if (!query) {
       return
-    } getImage()
+    }
+    const getImage = async () => {
+      setLoading(true);
+      try {
+        const dataImages = await serviceSeach(query, page);
+
+        setPhotos(prevState => (prevState ? [...prevState, ...dataImages.hits] : dataImages.hits));
+        setIsVisibleBtn(page < Math.ceil(dataImages.totalHits / 12));
+
+
+      } catch (error) {
+        setPhotos([]);
+      } finally { setLoading(false) }
+    }
+    getImage()
 
   }, [query, page]
   );
